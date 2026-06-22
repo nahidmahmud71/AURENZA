@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURENZA | Wear your Aura</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Unique Premium Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'obsidian': '#020408', 
+                        'champagne': '#E0C9A3', 
+                        'bronze': '#B89962', 
+                        'danger': '#991B1B',
+                    },
+                    fontFamily: {
+                        'cinzel': ['"Cinzel Decorative"', 'serif'],
+                        'playfair': ['"Playfair Display"', 'serif'],
+                        'jost': ['Jost', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #020408;
+            color: #ffffff;
+            font-family: 'Jost', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* 1. PREMIUM FLOATING AURA ANIMATION (Champagne, Bronze, Obsidian) */
+        .live-bg-aura {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #020408;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .live-bg-aura::before, .live-bg-aura::after, .aura-orb {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.6;
+            animation: floatAura 20s infinite alternate ease-in-out;
+        }
+
+        .live-bg-aura::before {
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(224, 201, 163, 0.07) 0%, transparent 70%);
+            top: -10%; left: -10%;
+        }
+
+        .live-bg-aura::after {
+            width: 50vw; height: 50vw;
+            background: radial-gradient(circle, rgba(184, 153, 98, 0.05) 0%, transparent 70%);
+            bottom: -10%; right: -10%;
+            animation-delay: -5s;
+        }
+
+        .aura-orb {
+            width: 45vw; height: 45vw;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+            top: 20%; left: 30%;
+            animation-duration: 25s;
+            animation-delay: -10s;
+        }
+
+        @keyframes floatAura {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(5%, 10%) scale(1.1); }
+            100% { transform: translate(-5%, -5%) scale(0.9); }
+        }
+
+        /* 2. WEAR YOUR AURA - MASSIVE HIGHLIGHT */
+        .tagline-highlight {
+            background: linear-gradient(to right, #B89962, #ffffff, #E0C9A3, #ffffff, #B89962);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shineText 3s linear infinite, pulseGlow 2s ease-in-out infinite alternate;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+        }
+
+        @keyframes shineText { to { background-position: 200% center; } }
+        @keyframes pulseGlow { 
+            from { text-shadow: 0 0 10px rgba(224, 201, 163, 0.4), 0 0 20px rgba(224, 201, 163, 0.2); }
+            to { text-shadow: 0 0 20px rgba(224, 201, 163, 0.8), 0 0 40px rgba(224, 201, 163, 0.5); }
+        }
+
+        /* Navigation Scrolled State */
+        .nav-scrolled {
+            background: rgba(2, 4, 8, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(224, 201, 163, 0.15);
+            padding-top: 15px !important; 
+            padding-bottom: 15px !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        /* Glass Panels */
+        .glass-panel {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(224, 201, 163, 0.15);
+            transition: all 0.4s ease;
+        }
+        .glass-panel:hover {
+            border: 1px solid rgba(224, 201, 163, 0.5);
+            box-shadow: 0 15px 40px rgba(184, 153, 98, 0.2);
+        }
+
+        /* 3. PERFECT CENTERING FOR LOGIN/ADMIN (No Scrolling) */
+        .centered-view {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-top: 80px; 
+            padding-bottom: 40px;
+        }
+
+        /* View Switching System */
+        .view-section { display: none; opacity: 0; transition: opacity 0.4s ease; }
+        .view-active { display: block; opacity: 1; animation: fadeInView 0.5s ease forwards; }
+        @keyframes fadeInView { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020408; }
+        ::-webkit-scrollbar-thumb { background: #B89962; border-radius: 4px; }
+        
+        /* Select & Input styling for quantity */
+        .qty-control { display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); border: 1px solid rgba(224,201,163,0.3); border-radius: 4px; overflow: hidden; }
+        .qty-btn { background: transparent; color: #E0C9A3; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; font-weight: bold; }
+        .qty-btn:hover { background: #E0C9A3; color: #000; }
+        .qty-display { width: 40px; text-align: center; font-size: 12px; color: white; }
+        
+        .size-select { background: rgba(0,0,0,0.5); border: 1px solid rgba(224,201,163,0.3); color: #E0C9A3; outline: none; padding: 6px 10px; font-size: 12px; cursor: pointer; border-radius: 4px; }
+        .size-select option { background: #000; color: #E0C9A3; }
+
+        .brand-card-bg { background-size: cover; background-position: center; position: relative; }
+        .brand-card-bg::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.65); transition: 0.4s; }
+        .brand-card-bg:hover::before { background: rgba(0,0,0,0.3); }
+
+        /* Disable interaction if out of stock */
+        .out-of-stock-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 20; }
+    </style>
+</head>
+<body class="relative text-gray-200">
+
+    <!-- LIVE PREMIUM BACKGROUND -->
+    <div class="live-bg-aura">
+        <div class="aura-orb"></div>
+    </div>
+
+    <!-- FIXED NAVBAR (No Overlapping) -->
+    <nav id="navbar" class="fixed w-full top-0 z-[100] p-6 transition-all duration-300 flex justify-between items-center">
+        <div onclick="switchView('home')" class="text-3xl md:text-4xl font-cinzel text-champagne tracking-[0.15em] cursor-pointer drop-shadow-[0_0_15px_rgba(224,201,163,0.4)]">
+            AURENZA
+        </div>
+        
+        <ul class="hidden md:flex space-x-12 text-[10px] font-medium tracking-[0.3em] text-gray-300">
+            <li onclick="switchView('home')" class="cursor-pointer hover:text-champagne transition duration-300 nav-link text-champagne" data-target="home">HOME</li>
+            <li onclick="switchView('all-collection')" class="cursor-pointer hover:text-champagne transition duration-300 nav-link" data-target="all-collection">COLLECTION</li>
+            <li onclick="openAdminPortal()" class="cursor-pointer hover:text-champagne transition duration-300 nav-link flex items-center gap-2" data-target="admin">
+                <i class="fa-solid fa-shield-halved text-bronze"></i> COMMAND
+            </li>
+        </ul>
+
+        <div class="flex space-x-8 text-champagne items-center relative">
+            <div class="cursor-pointer hover:text-white transition flex items-center gap-2" onclick="handleUserIconClick()">
+                <i class="fa-regular fa-user text-xl"></i>
+                <span id="nav-username" class="text-[9px] tracking-[0.2em] uppercase hidden md:block">SIGN IN</span>
+            </div>
+            
+            <div class="cursor-pointer hover:text-white transition relative" onclick="toggleCart()">
+                <i class="fa-solid fa-bag-shopping text-xl"></i>
+                <span id="cart-badge" class="hidden absolute -top-2 -right-3 bg-champagne text-obsidian text-[10px] w-5 h-5 flex justify-center items-center rounded-full font-bold shadow-[0_0_15px_rgba(224,201,163,0.8)]">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Global Toast Notification -->
+    <div id="toast" class="fixed top-24 left-1/2 transform -translate-x-1/2 -translate-y-10 opacity-0 z-[110] bg-gradient-to-r from-champagne to-bronze text-obsidian px-10 py-4 rounded-sm font-bold shadow-[0_0_50px_rgba(224,201,163,0.6)] pointer-events-none transition-all duration-500 text-[11px] tracking-[0.2em] uppercase flex items-center gap-3">
+        <i class="fa-solid fa-bell"></i> <span id="toast-msg">Message</span>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="min-h-screen">
+        
+        <!-- ================= HOME VIEW ================= -->
+        <div id="view-home" class="view-section view-active">
+            <section class="h-screen flex flex-col justify-center items-center text-center px-4 relative z-10">
+                <h2 data-aos="fade-down" data-aos-duration="1500" class="text-[10px] md:text-xs tracking-[0.8em] text-bronze mb-8 uppercase font-medium">The Epitome of Excellence</h2>
+                
+                <h1 data-aos="zoom-in" data-aos-duration="2000" class="text-6xl md:text-[10rem] leading-none font-cinzel text-champagne mb-4 tracking-widest drop-shadow-[0_0_40px_rgba(224,201,163,0.3)]">
+                    AURENZA
+                </h1>
+                
+                <!-- WEAR YOUR AURA Highlighted -->
+                <div data-aos="fade-up" data-aos-duration="1500" data-aos-delay="400" class="mt-8 mb-16">
+                    <span class="text-2xl md:text-5xl tagline-highlight font-playfair italic">
+                        Wear Your Aura
+                    </span>
+                </div>
+                
+                <button data-aos="fade-up" data-aos-delay="800" onclick="document.getElementById('brand-categories').scrollIntoView()" class="border border-bronze text-champagne font-bold px-12 py-5 tracking-[0.3em] hover:bg-champagne hover:text-obsidian transition duration-700 rounded-sm cursor-pointer text-[10px] uppercase shadow-[0_0_30px_rgba(184,153,98,0.2)]">
+                    Explore Boutiques
+                </button>
+            </section>
+
+            <!-- Brand Categories with Background Images -->
+            <section id="brand-categories" class="py-24 px-6 md:px-16 max-w-[1600px] mx-auto border-t border-white/5 relative z-10">
+                <div class="text-center mb-20" data-aos="fade-up">
+                    <h2 class="text-3xl md:text-5xl font-cinzel text-champagne tracking-[0.2em]">EXCLUSIVE HOUSES</h2>
+                    <p class="text-gray-400 mt-6 tracking-[0.3em] text-[10px] uppercase">Select a legacy to view their collection</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div onclick="openBrandPage('Ralph Lauren')" class="glass-panel brand-card-bg cursor-pointer h-[400px] flex justify-center items-center" style="background-image: url('https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?w=600&q=80');">
+                        <h3 class="relative z-10 text-2xl font-cinzel text-white tracking-[0.2em] transition duration-500 text-center drop-shadow-lg">RALPH LAUREN</h3>
+                    </div>
+                    <div onclick="openBrandPage('Zara')" class="glass-panel brand-card-bg cursor-pointer h-[400px] flex justify-center items-center" style="background-image: url('https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80');">
+                        <h3 class="relative z-10 text-2xl font-cinzel text-white tracking-[0.2em] transition duration-500 text-center drop-shadow-lg">ZARA</h3>
+                    </div>
+                    <div onclick="openBrandPage('Lacoste')" class="glass-panel brand-card-bg cursor-pointer h-[400px] flex justify-center items-center" style="background-image: url('https://images.unsplash.com/photo-1574180566232-aaad1b5b8450?w=600&q=80');">
+                        <h3 class="relative z-10 text-2xl font-cinzel text-white tracking-[0.2em] transition duration-500 text-center drop-shadow-lg">LACOSTE</h3>
+                    </div>
+                    <div onclick="openBrandPage('Tommy Hilfiger')" class="glass-panel brand-card-bg cursor-pointer h-[400px] flex justify-center items-center" style="background-image: url('https://images.unsplash.com/photo-1588359348347-9bc6cbea68fd?w=600&q=80');">
+                        <h3 class="relative z-10 text-2xl font-cinzel text-white tracking-[0.2em] transition duration-500 text-center drop-shadow-lg">TOMMY<br>HILFIGER</h3>
+                    </div>
+                    <div onclick="openBrandPage('Calvin Klein')" class="glass-panel brand-card-bg cursor-pointer h-[400px] flex justify-center items-center" style="background-image: url('https://images.unsplash.com/photo-1594938298598-718890ce9c74?w=600&q=80');">
+                        <h3 class="relative z-10 text-2xl font-cinzel text-white tracking-[0.2em] transition duration-500 text-center drop-shadow-lg">CALVIN<br>KLEIN</h3>
+                    </div>
+                    <div onclick="openBrandPage('Gucci')" class="glass-panel brand-card-bg cursor-pointer h-[400px] flex justify-center items-center" style="background-image: url('https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80');">
+                        <h3 class="relative z-10 text-2xl font-cinzel text-white tracking-[0.2em] transition duration-500 text-center drop-shadow-lg">GUCCI</h3>
+                    </div>
+                    <div onclick="openBrandPage('Armani')" class="glass-panel brand-card-bg cursor-pointer h-[400px] flex justify-center items-center" style="background-image: url('https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=600&q=80');">
+                        <h3 class="relative z-10 text-2xl font-cinzel text-white tracking-[0.2em] transition duration-500 text-center drop-shadow-lg">ARMANI</h3>
+                    </div>
+                    <div onclick="openBrandPage('Hugo Boss')" class="glass-panel brand-card-bg cursor-pointer h-[400px] flex justify-center items-center" style="background-image: url('https://images.unsplash.com/photo-1604072366595-e75de22c5e21?w=600&q=80');">
+                        <h3 class="relative z-10 text-2xl font-cinzel text-white tracking-[0.2em] transition duration-500 text-center drop-shadow-lg">HUGO<br>BOSS</h3>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= BRAND PAGE ================= -->
+        <div id="view-brand" class="view-section max-w-[1600px] mx-auto px-6 pt-32 pb-20 relative z-10">
+            <button onclick="switchView('home')" class="mb-12 border-2 border-champagne text-champagne px-8 py-3 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-champagne hover:text-obsidian transition shadow-[0_0_20px_rgba(224,201,163,0.3)]">
+                <i class="fa-solid fa-arrow-left mr-2"></i> Return to Vault
+            </button>
+            
+            <div class="text-center border-b border-white/10 pb-16 mb-16">
+                <h1 id="brand-page-title" class="text-5xl md:text-[5rem] font-cinzel text-champagne tracking-[0.1em] mb-4">BRAND</h1>
+                <p class="text-[10px] tracking-[0.4em] text-bronze uppercase">Exclusive Masterpieces</p>
+                <p class="text-gray-500 mt-4 text-xs font-playfair italic">Displaying 65 exclusive items from the vault.</p>
+            </div>
+
+            <!-- Massive 500+ Product Injection Container -->
+            <div id="brand-products-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- ================= ALL COLLECTION ================= -->
+        <div id="view-all-collection" class="view-section max-w-[1600px] mx-auto px-6 pt-32 pb-20 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-8 gap-8">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-cinzel text-champagne tracking-[0.1em]">THE GRAND VAULT</h1>
+                    <p class="text-[10px] tracking-[0.4em] text-bronze uppercase mt-4">All 520 Masterpieces</p>
+                </div>
+                
+                <div class="flex gap-3 overflow-x-auto pb-2 w-full md:w-auto scrollbar-hide">
+                    <button onclick="filterAllCollection('All')" class="filter-btn active bg-champagne text-obsidian px-6 py-2 text-[9px] font-bold tracking-[0.2em] uppercase transition whitespace-nowrap">All</button>
+                    <button onclick="filterAllCollection('Ralph Lauren')" class="filter-btn border border-white/20 text-gray-400 px-6 py-2 text-[9px] tracking-[0.2em] uppercase hover:border-champagne hover:text-champagne transition whitespace-nowrap">Ralph Lauren</button>
+                    <button onclick="filterAllCollection('Zara')" class="filter-btn border border-white/20 text-gray-400 px-6 py-2 text-[9px] tracking-[0.2em] uppercase hover:border-champagne hover:text-champagne transition whitespace-nowrap">Zara</button>
+                    <button onclick="filterAllCollection('Lacoste')" class="filter-btn border border-white/20 text-gray-400 px-6 py-2 text-[9px] tracking-[0.2em] uppercase hover:border-champagne hover:text-champagne transition whitespace-nowrap">Lacoste</button>
+                    <button onclick="filterAllCollection('Gucci')" class="filter-btn border border-white/20 text-gray-400 px-6 py-2 text-[9px] tracking-[0.2em] uppercase hover:border-champagne hover:text-champagne transition whitespace-nowrap">Gucci</button>
+                </div>
+            </div>
+
+            <div id="all-products-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
+                <!-- All products injected here -->
+            </div>
+            
+            <div class="mt-16 text-center">
+                <button onclick="loadMoreProducts()" id="load-more-btn" class="border border-champagne text-champagne px-12 py-4 text-xs tracking-widest hover:bg-champagne hover:text-black transition">LOAD MORE COLLECTION</button>
+            </div>
+        </div>
+
+        <!-- ================= USER AUTHENTICATION (Perfectly Centered) ================= -->
+        <div id="view-user-auth" class="view-section relative z-10">
+            <div class="centered-view max-w-md mx-auto px-6">
+                <div class="glass-panel p-12 text-center w-full shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-champagne/30 rounded-lg">
+                    <i class="fa-regular fa-user text-5xl text-champagne mb-6 drop-shadow-[0_0_15px_rgba(224,201,163,0.5)]"></i>
+                    <h2 class="text-3xl font-cinzel text-champagne tracking-[0.1em] mb-2">YOUR AURA</h2>
+                    <p class="text-[9px] tracking-[0.3em] text-gray-400 uppercase mb-8">Access your exclusive profile</p>
+
+                    <form onsubmit="handleUserAuth(event)" class="space-y-6">
+                        <input type="text" id="user-name" required placeholder="FULL NAME" class="w-full bg-black/80 border border-white/20 p-4 text-center text-xs tracking-[0.2em] text-champagne focus:outline-none focus:border-champagne transition uppercase rounded-sm">
+                        <input type="email" id="user-email" required placeholder="EMAIL ADDRESS" class="w-full bg-black/80 border border-white/20 p-4 text-center text-xs tracking-[0.2em] text-champagne focus:outline-none focus:border-champagne transition uppercase rounded-sm">
+                        
+                        <button type="submit" class="w-full bg-champagne text-obsidian py-4 font-bold tracking-[0.3em] text-[10px] uppercase hover:bg-white transition shadow-[0_0_20px_rgba(224,201,163,0.4)] mt-4 rounded-sm">
+                            Enter Vault
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= USER PROFILE (Perfectly Centered) ================= -->
+        <div id="view-user-profile" class="view-section relative z-10">
+            <div class="centered-view max-w-[900px] mx-auto px-6">
+                <div class="w-full glass-panel p-10 border border-champagne/20 rounded-lg">
+                    <div class="flex flex-col md:flex-row justify-between items-center border-b border-white/10 pb-8 mb-8 gap-6">
+                        <div class="text-center md:text-left">
+                            <h2 class="text-3xl font-cinzel text-champagne tracking-[0.1em] mb-2" id="profile-name">Name</h2>
+                            <p class="text-[10px] tracking-[0.3em] text-gray-400 uppercase" id="profile-email">Email</p>
+                        </div>
+                        <button onclick="logoutUser()" class="border-2 border-red-900 text-red-500 px-8 py-3 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-red-900 hover:text-white transition rounded-sm">
+                            Sign Out
+                        </button>
+                    </div>
+
+                    <h3 class="text-lg font-cinzel text-champagne tracking-[0.1em] mb-6">ORDER HISTORY</h3>
+                    <div id="user-orders-container" class="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+                        <!-- User orders injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ADMIN LOGIN (Perfectly Centered) ================= -->
+        <div id="view-admin-login" class="view-section relative z-10">
+            <div class="centered-view max-w-md mx-auto px-6">
+                <div class="glass-panel p-12 text-center w-full shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-danger/50 rounded-lg">
+                    <i class="fa-solid fa-shield-halved text-5xl text-danger mb-6 drop-shadow-[0_0_15px_rgba(153,27,27,0.5)]"></i>
+                    <h2 class="text-3xl font-cinzel text-white tracking-[0.1em] mb-2">RESTRICTED</h2>
+                    <p class="text-[9px] tracking-[0.3em] text-gray-500 uppercase mb-8">Authorized Personnel Only</p>
+
+                    <form onsubmit="handleAdminLogin(event)" class="space-y-6">
+                        <input type="text" id="admin-user" required placeholder="ADMIN ID" class="w-full bg-black/80 border border-white/20 p-4 text-center text-xs tracking-[0.2em] text-white focus:outline-none focus:border-danger transition uppercase rounded-sm">
+                        <input type="password" id="admin-pass" required placeholder="PASSCODE" class="w-full bg-black/80 border border-white/20 p-4 text-center text-xs tracking-[0.2em] text-white focus:outline-none focus:border-danger transition uppercase rounded-sm">
+                        
+                        <p id="login-error" class="text-danger text-[10px] font-bold tracking-widest hidden uppercase">Authentication Failed</p>
+                        
+                        <button type="submit" class="w-full bg-danger text-white py-4 font-bold tracking-[0.3em] text-[10px] uppercase hover:bg-red-700 transition shadow-[0_0_20px_rgba(153,27,27,0.4)] mt-4 rounded-sm">
+                            Authenticate
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ADMIN DASHBOARD ================= -->
+        <div id="view-admin-dashboard" class="view-section max-w-[1600px] mx-auto px-6 pt-32 pb-20 relative z-10">
+            <div class="flex justify-between items-center mb-10 border-b border-white/10 pb-6">
+                <h1 class="text-3xl md:text-4xl font-cinzel text-white tracking-[0.1em] flex items-center gap-4">
+                    <i class="fa-solid fa-chess-king text-bronze"></i> COMMAND CENTER
+                </h1>
+                <button onclick="logoutAdmin()" class="border-2 border-danger/50 text-danger px-8 py-3 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-danger/20 transition rounded-sm">
+                    Lock Portal <i class="fa-solid fa-lock ml-2"></i>
+                </button>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="glass-panel p-8 border-l-4 border-l-champagne">
+                    <p class="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-3">Total Revenue</p>
+                    <h3 class="text-4xl font-playfair text-champagne" id="stat-revenue">৳ 0</h3>
+                </div>
+                <div class="glass-panel p-8 border-l-4 border-l-blue-500">
+                    <p class="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-3">Total Orders</p>
+                    <h3 class="text-4xl font-playfair text-white" id="stat-orders">0</h3>
+                </div>
+                <div class="glass-panel p-8 border-l-4 border-l-yellow-500">
+                    <p class="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-3">Pending Actions</p>
+                    <h3 class="text-4xl font-playfair text-white" id="stat-pending">0</h3>
+                </div>
+            </div>
+
+            <!-- Orders Table (Fixed Overlapping) -->
+            <div class="glass-panel overflow-hidden border border-white/10 rounded-lg">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[1000px]">
+                        <thead>
+                            <tr class="bg-black/80 text-champagne text-[10px] font-bold tracking-[0.3em] uppercase border-b border-white/10">
+                                <th class="p-6">Order Details</th>
+                                <th class="p-6">Customer & Address</th>
+                                <th class="p-6">Items (Size/Qty)</th>
+                                <th class="p-6 text-center">Action & Notify</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-orders-body" class="divide-y divide-white/5 bg-obsidian/40">
+                            <!-- Orders injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- CART SIDEBAR -->
+    <div id="cart-overlay" class="fixed inset-0 z-[120] flex justify-end hidden">
+        <div class="absolute inset-0 bg-obsidian/80 backdrop-blur-md" onclick="toggleCart()"></div>
+        <div class="relative w-full max-w-md bg-[#020408] border-l border-champagne/30 h-full flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.9)] transform translate-x-full transition-transform duration-500" id="cart-sidebar">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-black">
+                <h2 class="text-2xl font-cinzel text-champagne tracking-[0.1em]">YOUR AURA</h2>
+                <button onclick="toggleCart()" class="text-gray-500 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+            <div id="cart-footer" class="p-8 border-t border-white/10 bg-black hidden">
+                <div class="flex justify-between items-end mb-6">
+                    <span class="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase">Subtotal</span>
+                    <span class="text-3xl font-playfair text-champagne" id="cart-total-price">৳ 0</span>
+                </div>
+                <button onclick="openCheckout()" class="w-full bg-champagne text-obsidian py-4 font-bold tracking-[0.3em] text-[11px] uppercase hover:bg-white transition shadow-[0_0_20px_rgba(224,201,163,0.3)] rounded-sm">Secure Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div id="checkout-modal" class="fixed inset-0 z-[130] flex justify-center items-center p-4 hidden">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" onclick="closeCheckout()"></div>
+        <div class="relative w-full max-w-xl bg-[#020408] p-10 border border-champagne/40 shadow-[0_30px_60px_rgba(0,0,0,0.9)] rounded-lg">
+            <div id="check-step-1" class="block">
+                <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-6">
+                    <h2 class="text-2xl font-cinzel text-champagne tracking-[0.1em]">AUTHENTICATE ORDER</h2>
+                    <i class="fa-solid fa-xmark cursor-pointer text-gray-500 hover:text-white text-xl" onclick="closeCheckout()"></i>
+                </div>
+                <form id="checkout-form" class="space-y-5">
+                    <input required type="text" id="c-name" placeholder="Full Name" class="w-full bg-black/60 border border-white/20 p-4 text-white text-sm focus:outline-none focus:border-champagne font-playfair rounded-sm" />
+                    <input required type="email" id="c-email" placeholder="Email Address" class="w-full bg-black/60 border border-white/20 p-4 text-white text-sm focus:outline-none focus:border-champagne rounded-sm" />
+                    <input required type="text" id="c-phone" placeholder="Phone Number" class="w-full bg-black/60 border border-white/20 p-4 text-white text-sm focus:outline-none focus:border-champagne rounded-sm" />
+                    <textarea required rows="3" id="c-address" placeholder="Complete Delivery Address" class="w-full bg-black/60 border border-white/20 p-4 text-white text-sm focus:outline-none focus:border-champagne font-playfair rounded-sm"></textarea>
+                    <button type="submit" class="w-full bg-champagne text-obsidian py-4 font-bold tracking-[0.3em] text-[11px] uppercase hover:bg-white transition mt-6 rounded-sm shadow-[0_0_20px_rgba(224,201,163,0.3)]">Place Order Now</button>
+                </form>
+            </div>
+            <div id="check-step-2" class="hidden text-center py-20">
+                <div class="w-20 h-20 mx-auto mb-8 border-4 border-white/10 border-t-champagne rounded-full animate-spin shadow-[0_0_30px_rgba(224,201,163,0.4)]"></div>
+                <h3 class="text-2xl font-cinzel text-champagne tracking-[0.1em] mb-2">SECURING ORDER</h3>
+                <p class="text-gray-400 text-xs tracking-widest uppercase">Connecting to secure gateway...</p>
+            </div>
+            <div id="check-step-3" class="hidden text-center py-16">
+                <div class="w-24 h-24 bg-champagne/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-champagne/30 shadow-[0_0_40px_rgba(224,201,163,0.4)]">
+                    <i class="fa-solid fa-check text-5xl text-champagne"></i>
+                </div>
+                <h2 class="text-3xl font-cinzel text-white mb-4 tracking-[0.1em]">ORDER RECEIVED</h2>
+                <p class="text-gray-400 text-sm font-playfair italic mb-10">Your Aura is secured. An executive will confirm shortly.</p>
+                <button onclick="finishCheckout()" class="border-2 border-champagne text-champagne px-10 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-champagne hover:text-obsidian transition rounded-sm">Return to Vault</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 pt-24 pb-12 bg-[#010204] relative z-10">
+        <div class="max-w-[1600px] mx-auto px-6 md:px-16">
+            <div class="flex space-x-6 mb-20">
+                <a href="#" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-gray-400 hover:text-champagne hover:border-champagne hover:scale-110 transition duration-300"><i class="fa-brands fa-instagram text-lg"></i></a>
+                <a href="#" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-gray-400 hover:text-champagne hover:border-champagne hover:scale-110 transition duration-300"><i class="fa-brands fa-pinterest-p text-lg"></i></a>
+                <a href="#" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-gray-400 hover:text-champagne hover:border-champagne hover:scale-110 transition duration-300"><i class="fa-solid fa-xmark text-lg"></i></a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-32">
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-champagne text-[11px] font-bold tracking-[0.3em] uppercase mb-8">EXPLORE</h4>
+                        <ul class="space-y-5 text-gray-400 text-sm font-light">
+                            <li><a href="#" onclick="switchView('all-collection')" class="hover:text-white transition">Collection</a></li>
+                            <li><a href="#" class="hover:text-white transition">Our Story</a></li>
+                            <li><a href="#" class="hover:text-white transition">Atelier</a></li>
+                            <li><a href="#" class="hover:text-white transition">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-champagne text-[11px] font-bold tracking-[0.3em] uppercase mb-8">CLIENT CARE</h4>
+                        <ul class="space-y-5 text-gray-400 text-sm font-light">
+                            <li><a href="#" class="hover:text-white transition">Shipping</a></li>
+                            <li><a href="#" class="hover:text-white transition">Returns</a></li>
+                            <li><a href="#" class="hover:text-white transition">Size Guide</a></li>
+                            <li><a href="#" class="hover:text-white transition">Concierge</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-champagne text-[11px] font-bold tracking-[0.3em] uppercase mb-6">JOIN THE INNER CIRCLE</h4>
+                    <p class="text-gray-400 text-sm font-light mb-8">Be first to receive access to limited collections and private releases.</p>
+                    <form onsubmit="event.preventDefault(); showToast('Subscribed to Inner Circle');" class="relative max-w-md">
+                        <input type="email" placeholder="Your email address" required class="w-full bg-transparent border-b border-white/30 text-champagne p-3 text-sm outline-none focus:border-champagne transition">
+                        <button type="submit" class="absolute right-2 top-3 text-champagne hover:text-white hover:scale-110 transition"><i class="fa-solid fa-arrow-right text-lg"></i></button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mt-24 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-[9px] font-bold text-gray-600 tracking-[0.3em] uppercase gap-4">
+                <p>&copy; 2026 AURENZA. ALL RIGHTS RESERVED.</p>
+                <div class="flex space-x-6"><a href="#" class="hover:text-gray-300 transition">PRIVACY POLICY</a><a href="#" class="hover:text-gray-300 transition">TERMS OF SERVICE</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // MASSIVE PRODUCT GENERATOR (500+ Items)
+        // Using high-quality fashion images
+        const brandNames = ['Ralph Lauren', 'Zara', 'Lacoste', 'Tommy Hilfiger', 'Calvin Klein', 'Gucci', 'Armani', 'Hugo Boss'];
+        const imagePool = [
+            'https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?w=600&q=80',
+            'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80',
+            'https://images.unsplash.com/photo-1574180566232-aaad1b5b8450?w=600&q=80',
+            'https://images.unsplash.com/photo-1588359348347-9bc6cbea68fd?w=600&q=80',
+            'https://images.unsplash.com/photo-1594938298598-718890ce9c74?w=600&q=80',
+            'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80',
+            'https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=600&q=80',
+            'https://images.unsplash.com/photo-1604072366595-e75de22c5e21?w=600&q=80',
+            'https://images.unsplash.com/photo-1626497764746-6dc36546b388?w=600&q=80',
+            'https://images.unsplash.com/photo-1598032895397-b9472444bf93?w=600&q=80',
+            'https://images.unsplash.com/photo-1620012253295-c15bc3e653e3?w=600&q=80',
+            'https://images.unsplash.com/photo-1617137968427-85924c800a22?w=600&q=80'
+        ];
+        const modifiers = ['Solid Oxford', 'Velvet Edition', 'Classic Stripe', 'Monogram Silk', 'Executive Blend', 'Minimalist Essential', 'Florentine Print', 'Milano Fit'];
+
+        const PRODUCTS = [];
+        let idCounter = 1;
+
+        // Generate 65 items per brand = 520 Total Products
+        brandNames.forEach(brand => {
+            for(let i=1; i<=65; i++) {
+                const mod = modifiers[Math.floor(Math.random() * modifiers.length)];
+                const img = imagePool[Math.floor(Math.random() * imagePool.length)];
+                // 90% chance to be in stock
+                const inStock = Math.random() > 0.1; 
+                // Random premium pricing
+                const originalPrice = Math.floor(Math.random() * 15000) + 8000;
+                const price = Math.floor(originalPrice * (0.6 + Math.random() * 0.3)); // 10% to 40% discount
+
+                PRODUCTS.push({
+                    id: `PRD-${idCounter}`,
+                    brand: brand,
+                    name: `${brand} ${mod} V${i}`,
+                    originalPrice: originalPrice,
+                    price: price,
+                    img: img,
+                    inStock: inStock
+                });
+                idCounter++;
+            }
+        });
+
+        // System State
+        let currentUser = JSON.parse(localStorage.getItem('aurenza_user')) || null;
+        let cart = JSON.parse(localStorage.getItem('aurenza_cart')) || [];
+        let orders = JSON.parse(localStorage.getItem('aurenza_orders')) || []; 
+        let isAdminAuth = sessionStorage.getItem('aurenza_admin_auth') === 'true';
+
+        let currentlyDisplayedCount = 0;
+        const BATCH_SIZE = 24;
+
+        window.onload = () => {
+            AOS.init({ once: true, offset: 50, duration: 800 });
+            currentlyDisplayedCount = BATCH_SIZE;
+            renderAllProducts('All', false);
+            updateUserUI();
+            updateCartUI();
+            
+            // Fix overlapping on scroll by adding solid bg to navbar
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                if (window.scrollY > 50) nav.classList.add('nav-scrolled');
+                else nav.classList.remove('nav-scrolled');
+            });
+        };
+
+        // UI & Navigation
+        function switchView(viewId) {
+            window.scrollTo(0,0);
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
+            document.getElementById('view-' + viewId).classList.add('view-active');
+
+            document.querySelectorAll('.nav-link').forEach(el => {
+                if(el.dataset.target === viewId) { el.classList.add('text-champagne'); el.classList.remove('text-gray-300'); } 
+                else { el.classList.remove('text-champagne'); el.classList.add('text-gray-300'); }
+            });
+
+            if(viewId === 'admin-dashboard') renderAdmin();
+            if(viewId === 'user-profile') renderUserProfile();
+            if(viewId === 'all-collection') { currentlyDisplayedCount = BATCH_SIZE; renderAllProducts('All', false); document.getElementById('load-more-btn').style.display = 'inline-block'; }
+        }
+
+        // Qty UI Logic
+        function incQty(id) { let el = document.getElementById(`qty-${id}`); el.innerText = parseInt(el.innerText) + 1; }
+        function decQty(id) { let el = document.getElementById(`qty-${id}`); if(parseInt(el.innerText) > 1) el.innerText = parseInt(el.innerText) - 1; }
+
+        // Product Rendering Engine
+        function createProductCard(product) {
+            const stockUI = product.inStock 
+                ? `<div class="mt-5 flex justify-between items-center px-4 gap-2">
+                    <select id="size-${product.id}" class="size-select flex-1"><option value="S">Size: S</option><option value="M" selected>Size: M</option><option value="L">Size: L</option><option value="XL">Size: XL</option></select>
+                    <div class="qty-control flex-1">
+                        <button onclick="decQty('${product.id}')" class="qty-btn">-</button>
+                        <span id="qty-${product.id}" class="qty-display">1</span>
+                        <button onclick="incQty('${product.id}')" class="qty-btn">+</button>
+                    </div>
+                   </div>
+                   <button onclick="addToCart('${product.id}')" class="mt-4 w-full bg-champagne text-obsidian py-3 font-bold tracking-[0.3em] text-[10px] uppercase hover:bg-white transition">Acquire Item</button>`
+                : `<div class="mt-5 px-4"><div class="text-center py-3 border border-danger bg-danger/10 text-danger tracking-widest text-[10px] font-bold uppercase rounded-sm">Out of Stock</div></div>
+                   <button disabled class="mt-4 w-full bg-gray-800 text-gray-500 py-3 font-bold tracking-[0.3em] text-[10px] uppercase cursor-not-allowed">Unavailable</button>`;
+
+            const outOfStockOverlay = !product.inStock ? `<div class="out-of-stock-overlay"><span class="text-white border-2 border-white px-4 py-2 font-bold tracking-widest text-xs uppercase transform -rotate-12 bg-black/50">Sold Out</span></div>` : '';
+
+            return `
+                <div class="glass-panel group flex flex-col pb-4 border border-white/10 rounded-sm overflow-hidden relative">
+                    <div class="h-[380px] bg-black relative overflow-hidden">
+                        ${outOfStockOverlay}
+                        <img src="${product.img}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-700">
+                        <div class="absolute top-3 left-3 bg-black/80 text-champagne text-[8px] tracking-[0.3em] px-3 py-1 uppercase border border-champagne/30 backdrop-blur-sm z-10">${product.brand}</div>
+                    </div>
+                    <div class="mt-6 text-center px-4">
+                        <h3 class="text-sm font-playfair italic tracking-wider text-gray-100 truncate mb-1">${product.name}</h3>
+                        <p class="text-[9px] text-gray-500 tracking-widest font-mono mb-3">ID: ${product.id}</p>
+                        <div class="mt-2 flex justify-center items-center gap-4">
+                            <span class="line-through text-gray-600 text-[11px] tracking-widest">৳ ${product.originalPrice.toLocaleString()}</span>
+                            <span class="text-champagne font-bold text-lg tracking-widest">৳ ${product.price.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    ${stockUI}
+                </div>
+            `;
+        }
+
+        function openBrandPage(brandName) {
+            document.getElementById('brand-page-title').innerText = brandName;
+            // Get all 65 products for this brand
+            const brandProducts = PRODUCTS.filter(p => p.brand === brandName);
+            document.getElementById('brand-products-grid').innerHTML = brandProducts.map(p => createProductCard(p)).join('');
+            switchView('brand');
+        }
+
+        // All Collection filtering and pagination
+        let currentFilter = 'All';
+        function filterAllCollection(brandName) {
+            currentFilter = brandName;
+            currentlyDisplayedCount = BATCH_SIZE;
+            document.querySelectorAll('#view-all-collection .filter-btn').forEach(btn => {
+                if(btn.innerText.trim().toLowerCase() === brandName.toLowerCase()) {
+                    btn.classList.add('bg-champagne', 'text-obsidian'); btn.classList.remove('border', 'border-white/20', 'text-gray-400');
+                } else {
+                    btn.classList.remove('bg-champagne', 'text-obsidian'); btn.classList.add('border', 'border-white/20', 'text-gray-400');
+                }
+            });
+            renderAllProducts(brandName, false);
+        }
+
+        function renderAllProducts(brandName, append = false) {
+            let displayList = brandName === 'All' ? PRODUCTS : PRODUCTS.filter(p => p.brand === brandName);
+            
+            // Hide load more if we reached the end
+            if(currentlyDisplayedCount >= displayList.length) {
+                document.getElementById('load-more-btn').style.display = 'none';
+            } else {
+                document.getElementById('load-more-btn').style.display = 'inline-block';
+            }
+
+            const itemsToShow = displayList.slice(0, currentlyDisplayedCount);
+            const htmlStr = itemsToShow.map(p => createProductCard(p)).join('');
+            
+            if(append) {
+                document.getElementById('all-products-grid').innerHTML = htmlStr; // Replace to cleanly handle sizing
+            } else {
+                document.getElementById('all-products-grid').innerHTML = htmlStr;
+            }
+        }
+
+        function loadMoreProducts() {
+            currentlyDisplayedCount += BATCH_SIZE;
+            renderAllProducts(currentFilter, true);
+        }
+
+        // Auth
+        function handleUserIconClick() { currentUser ? switchView('user-profile') : switchView('user-auth'); }
+        function handleUserAuth(e) {
+            e.preventDefault();
+            currentUser = { name: document.getElementById('user-name').value, email: document.getElementById('user-email').value };
+            localStorage.setItem('aurenza_user', JSON.stringify(currentUser));
+            updateUserUI(); showToast(`Welcome back, ${currentUser.name.split(' ')[0]}`); switchView('home');
+        }
+        function logoutUser() { currentUser = null; localStorage.removeItem('aurenza_user'); updateUserUI(); switchView('home'); showToast("Successfully Logged Out"); }
+        function updateUserUI() {
+            const navName = document.getElementById('nav-username');
+            if(currentUser) { navName.innerText = currentUser.name.split(' ')[0]; navName.classList.add('text-champagne'); } 
+            else { navName.innerText = "SIGN IN"; navName.classList.remove('text-champagne'); }
+        }
+
+        function renderUserProfile() {
+            if(!currentUser) return;
+            document.getElementById('profile-name').innerText = currentUser.name; document.getElementById('profile-email').innerText = currentUser.email;
+            const userOrders = orders.filter(o => o.customer.email === currentUser.email);
+            const container = document.getElementById('user-orders-container');
+            if(userOrders.length === 0) { container.innerHTML = `<p class="text-gray-500 font-playfair italic text-sm">No acquisitions in your history.</p>`; return; }
+            container.innerHTML = userOrders.map(order => `
+                <div class="bg-black/60 p-5 border-l-4 ${order.status==='Pending'?'border-l-yellow-500':'border-l-green-500'} mb-4 rounded-r-lg">
+                    <div class="flex justify-between items-center mb-3"><span class="font-mono text-xs text-champagne font-bold">${order.id}</span><span class="text-[9px] tracking-widest uppercase text-gray-400">${order.date}</span></div>
+                    <div class="flex flex-col gap-1 mb-3 border-t border-white/10 pt-3">
+                        ${order.items.map(i => `<span class="text-xs text-gray-300">- ${i.name} (Sz: ${i.size}) x${i.qty}</span>`).join('')}
+                    </div>
+                    <div class="flex justify-between items-end border-t border-white/10 pt-3 mt-2">
+                        <span class="text-[10px] font-bold ${order.status==='Pending'?'text-yellow-500':'text-green-500'} uppercase tracking-widest px-2 py-1 bg-black rounded-sm border ${order.status==='Pending'?'border-yellow-500/30':'border-green-500/30'}">${order.status}</span>
+                        <span class="text-lg font-playfair text-white">৳ ${order.total.toLocaleString()}</span>
+                    </div>
+                </div>`).join('');
+        }
+
+        // Cart
+        function toggleCart() {
+            const overlay = document.getElementById('cart-overlay');
+            const sidebar = document.getElementById('cart-sidebar');
+            if(overlay.classList.contains('hidden')) { overlay.classList.remove('hidden'); setTimeout(() => sidebar.classList.remove('translate-x-full'), 10); } 
+            else { sidebar.classList.add('translate-x-full'); setTimeout(() => overlay.classList.add('hidden'), 500); }
+        }
+        
+        function addToCart(id) {
+            const product = PRODUCTS.find(p => p.id === id);
+            const size = document.getElementById(`size-${id}`).value;
+            const qty = parseInt(document.getElementById(`qty-${id}`).innerText);
+            
+            const existIdx = cart.findIndex(item => item.id === id && item.size === size);
+            if(existIdx > -1) cart[existIdx].qty += qty;
+            else cart.push({...product, size, qty});
+            
+            localStorage.setItem('aurenza_cart', JSON.stringify(cart));
+            updateCartUI(); showToast("Added to Vault");
+            
+            // Reset UI qty back to 1
+            document.getElementById(`qty-${id}`).innerText = "1";
+        }
+        
+        function removeCart(index) { cart.splice(index, 1); localStorage.setItem('aurenza_cart', JSON.stringify(cart)); updateCartUI(); }
+        
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge'); const container = document.getElementById('cart-items-container'); const footer = document.getElementById('cart-footer');
+            let totalQty = 0, totalPrice = 0;
+            if(cart.length === 0) { badge.classList.add('hidden'); footer.classList.add('hidden'); container.innerHTML = `<div class="text-center mt-32 opacity-30"><i class="fa-solid fa-gem text-6xl mb-6 text-champagne"></i><p class="font-cinzel text-xl tracking-widest text-white">Empty Vault</p></div>`; return; }
+            
+            badge.classList.remove('hidden'); footer.classList.remove('hidden');
+            container.innerHTML = cart.map((item, idx) => {
+                totalQty += item.qty; totalPrice += (item.price * item.qty);
+                return `
+                <div class="flex gap-4 items-center bg-white/5 p-4 border border-champagne/20 rounded-md relative group">
+                    <img src="${item.img}" class="w-20 h-24 object-cover opacity-90 border border-white/10 rounded-sm">
+                    <div class="flex-1">
+                        <p class="text-[8px] font-bold tracking-[0.2em] text-bronze uppercase">${item.brand}</p>
+                        <h4 class="text-sm font-playfair italic text-white mt-1 leading-tight">${item.name}</h4>
+                        <div class="flex gap-3 mt-2 text-[10px] text-gray-400 font-mono">
+                            <span class="bg-black/50 px-2 py-1 rounded-sm border border-white/10">SZ: ${item.size}</span>
+                            <span class="bg-black/50 px-2 py-1 rounded-sm border border-white/10">QTY: ${item.qty}</span>
+                        </div>
+                        <p class="text-sm text-champagne mt-2 font-bold">৳ ${(item.price * item.qty).toLocaleString()}</p>
+                    </div>
+                    <button onclick="removeCart(${idx})" class="absolute top-2 right-2 text-gray-600 hover:text-danger p-2 text-sm transition"><i class="fa-solid fa-xmark"></i></button>
+                </div>`;
+            }).join('');
+            badge.innerText = totalQty; document.getElementById('cart-total-price').innerText = `৳ ${totalPrice.toLocaleString()}`;
+        }
+
+        // Checkout System
+        function openCheckout() {
+            if(cart.length === 0) return;
+            if(!currentUser) { toggleCart(); showToast("Authentication Required"); switchView('user-auth'); return; }
+            toggleCart();
+            document.getElementById('c-name').value = currentUser.name; document.getElementById('c-email').value = currentUser.email;
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            document.getElementById('check-step-1').classList.remove('hidden'); document.getElementById('check-step-2').classList.add('hidden'); document.getElementById('check-step-3').classList.add('hidden');
+        }
+        function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden'); }
+        
+        document.getElementById('checkout-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const customer = { name: document.getElementById('c-name').value, email: document.getElementById('c-email').value, phone: document.getElementById('c-phone').value, address: document.getElementById('c-address').value };
+            const total = cart.reduce((s,i) => s + (i.price * i.qty), 0);
+            const orderId = 'AUR-' + Math.floor(Math.random()*1000000);
+
+            document.getElementById('check-step-1').classList.add('hidden'); document.getElementById('check-step-2').classList.remove('hidden');
+            setTimeout(() => {
+                orders.unshift({ id: orderId, date: new Date().toLocaleString(), status: 'Pending', total, items: [...cart], customer });
+                localStorage.setItem('aurenza_orders', JSON.stringify(orders));
+                document.getElementById('check-step-2').classList.add('hidden'); document.getElementById('check-step-3').classList.remove('hidden');
+                setTimeout(() => showToast("🔔 ADMIN ALERT: New Acquisition Secured!"), 1500);
+            }, 3000); // 3 second processing simulation
+        });
+        
+        function finishCheckout() { cart = []; localStorage.setItem('aurenza_cart', JSON.stringify(cart)); updateCartUI(); closeCheckout(); document.getElementById('checkout-form').reset(); }
+
+        // Admin Portal
+        function openAdminPortal() { isAdminAuth ? switchView('admin-dashboard') : switchView('admin-login'); }
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            if(document.getElementById('admin-user').value === 'admin' && document.getElementById('admin-pass').value === 'aurenza2026') {
+                document.getElementById('login-error').classList.add('hidden'); isAdminAuth = true; sessionStorage.setItem('aurenza_admin_auth', 'true');
+                document.getElementById('admin-user').value = ''; document.getElementById('admin-pass').value = '';
+                switchView('admin-dashboard'); showToast("Command Access Granted.");
+            } else document.getElementById('login-error').classList.remove('hidden');
+        }
+        function logoutAdmin() { isAdminAuth = false; sessionStorage.removeItem('aurenza_admin_auth'); switchView('home'); showToast("Portal Secured & Locked."); }
+        
+        // Admin Dashboard Rendering (Fixed overlapping addresses)
+        function renderAdmin() {
+            document.getElementById('stat-orders').innerText = orders.length;
+            document.getElementById('stat-pending').innerText = orders.filter(o => o.status === 'Pending').length;
+            document.getElementById('stat-revenue').innerText = `৳ ${orders.reduce((s,o) => s + o.total, 0).toLocaleString()}`;
+            
+            const tbody = document.getElementById('admin-orders-body');
+            if(orders.length === 0) { tbody.innerHTML = `<tr><td colspan="4" class="p-10 text-center text-gray-500 font-cinzel tracking-widest text-lg">No Orders in Vault.</td></tr>`; return; }
+            
+            tbody.innerHTML = orders.map((order) => `
+                <tr class="border-b border-white/5 hover:bg-white/5 transition">
+                    <td class="p-6 align-top">
+                        <p class="font-mono text-sm text-champagne font-bold">${order.id}</p>
+                        <p class="text-[9px] mt-2 text-gray-500 tracking-widest">${order.date}</p>
+                        <span class="inline-block mt-3 px-3 py-1 text-[9px] font-bold uppercase border rounded-sm ${order.status==='Pending'?'text-yellow-500 border-yellow-500/50 bg-yellow-500/10':'text-green-500 border-green-500/50 bg-green-500/10'}">${order.status}</span>
+                    </td>
+                    <td class="p-6 align-top">
+                        <p class="text-sm text-white font-playfair font-bold">${order.customer.name}</p>
+                        <p class="text-[10px] text-gray-400 mt-1 font-mono">${order.customer.phone} <br> ${order.customer.email}</p>
+                        <div class="mt-3 text-[10px] text-gray-300 bg-black/80 p-3 border border-champagne/30 rounded-sm w-full max-w-xs whitespace-normal break-words leading-relaxed">
+                            <span class="text-bronze font-bold block mb-1 tracking-widest uppercase text-[8px]">Delivery Address:</span>
+                            ${order.customer.address}
+                        </div>
+                    </td>
+                    <td class="p-6 align-top">
+                        <div class="flex flex-col gap-3">
+                            ${order.items.map(item => `
+                                <div class="flex items-start gap-3 bg-black/40 p-2 rounded-sm border border-white/5">
+                                    <img src="${item.img}" class="w-10 h-12 object-cover rounded-sm border border-white/10">
+                                    <div>
+                                        <p class="text-[10px] text-gray-200 font-bold leading-tight">${item.name}</p>
+                                        <p class="text-[9px] text-champagne font-mono mt-1">SZ: ${item.size} | QTY: ${item.qty}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                    <td class="p-6 align-top">
+                        <select onchange="updateOrderStatus('${order.id}', this.value)" class="bg-black border border-champagne/40 text-champagne text-[10px] font-bold tracking-widest uppercase p-3 w-full mb-3 outline-none rounded-sm cursor-pointer hover:border-champagne transition">
+                            <option value="Pending" ${order.status==='Pending'?'selected':''}>Pending</option>
+                            <option value="Confirmed" ${order.status==='Confirmed'?'selected':''}>Confirmed</option>
+                            <option value="Delivered" ${order.status==='Delivered'?'selected':''}>Delivered</option>
+                        </select>
+                        <button onclick="simulateEmailSend('${order.id}', '${order.customer.email}')" class="bg-champagne text-obsidian px-4 py-3 text-[10px] font-bold tracking-[0.2em] uppercase w-full rounded-sm hover:bg-white transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> Notify
+                        </button>
+                    </td>
+                </tr>`).join('');
+        }
+        
+        function updateOrderStatus(id, status) { orders.find(o => o.id === id).status = status; localStorage.setItem('aurenza_orders', JSON.stringify(orders)); renderAdmin(); showToast(`Status updated to ${status}`); }
+        
+        // Re-added Email Simulation System
+        function simulateEmailSend(orderId, email) {
+            showToast(`Initiating Secure Mail Protocol...`);
+            setTimeout(() => { 
+                showToast(`Connecting client for ${email}...`); 
+                setTimeout(() => { 
+                    // Opens default mail app with pre-filled content
+                    window.location.href = `mailto:${email}?subject=AURENZA Exclusive Alert: Order ${orderId}&body=Dear Client,%0D%0A%0D%0AWe are pleased to inform you that your exclusive order (${orderId}) has been confirmed and is being prepared with utmost care.%0D%0A%0D%0AThank you for choosing AURENZA.%0D%0AWear your Aura.%0D%0A%0D%0AExecutive Support Team`; 
+                }, 1500); 
+            }, 1000);
+        }
+        
+        function showToast(msg) { const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg; t.style.opacity = '1'; t.style.transform = 'translate(-50%, 0)'; setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translate(-50%, -40px)'; }, 3500); }
+    </script>
+</body>
+</html>
